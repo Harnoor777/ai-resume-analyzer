@@ -8,6 +8,16 @@ An AI-powered Resume Analyzer that parses resumes, understands job descriptions,
 
 ## High-Level Architecture
 
+## System Architecture
+
+High-level pipeline showing resume processing, NLP analysis, ATS scoring, and recommendations.
+
+![Architecture Diagram](assets/architecture.png)
+
+For detailed design decisions, see: [docs/architecture.md](docs/architecture.md)
+
+
+
 User Request
 
 │
