@@ -14,9 +14,6 @@ High-level pipeline showing resume processing, NLP analysis, ATS scoring, and re
 
 ![Architecture Diagram](assets/architecture.png)
 
-For detailed design decisions, see: [docs/architecture.md](docs/architecture.md)
-
-
 
 User Request
 
