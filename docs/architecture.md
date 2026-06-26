@@ -7,6 +7,7 @@ An AI-powered Resume Analyzer that parses resumes, understands job descriptions,
 ---
 
 ## High-Level Architecture
+![Architecture](assets\architecture.png)
 
 ## System Architecture
 
