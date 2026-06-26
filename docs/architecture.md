@@ -12,7 +12,7 @@ An AI-powered Resume Analyzer that parses resumes, understands job descriptions,
 
 High-level pipeline showing resume processing, NLP analysis, ATS scoring, and recommendations.
 
-![Architecture Diagram](assets/architecture.png)
+[![Architecture Diagram](assets/architecture.png)](assets/architecture.png)
 
 
 User Request
