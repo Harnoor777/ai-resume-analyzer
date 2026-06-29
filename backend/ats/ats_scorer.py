@@ -1,7 +1,7 @@
 import json, re, os, math
+import numpy as np
 from collections import Counter
 
-# junk phrases that are NOT skills
 JUNK_PHRASES = {
     "san francisco","such as","at least","s degree","people who","work at",
     "at figma","pay range","interview process","experience working","communication skills",
@@ -22,25 +22,42 @@ JUNK_PHRASES = {
     "trusted advisor","next generation","senior leaders","senior stakeholders",
     "real world","emerging technologies","revenue growth","value proposition",
     "detail oriented","self starter","product roadmap","strategic thinking",
-    "cross functional","functional teams","cross functionally", "computer science"
+    "cross functional","functional teams","cross functionally","computer science",
+    "fair chance","equal opportunity","veteran status","national origin","los angeles",
+    "artificial intelligence","job posting","job duties","computer hardware",
+    "openai s","at scale","at datadog",
 }
 
-def is_real_skill(phrase):
-    return phrase.lower() not in JUNK_PHRASES
+# FAISS index loaded once at module level
+_faiss_index = None
+_faiss_meta  = None
+_model       = None
 
-_model = None
+def _load_faiss():
+    global _faiss_index, _faiss_meta
+    if _faiss_index is None:
+        import faiss
+        base = os.path.join(os.path.dirname(__file__), "..", "..")
+        idx_path  = os.path.join(base, "datasets", "faiss_index.bin")
+        meta_path = os.path.join(base, "datasets", "faiss_meta.json")
+        if os.path.exists(idx_path):
+            _faiss_index = faiss.read_index(idx_path)
+            with open(meta_path, encoding="utf-8") as f:
+                _faiss_meta = json.load(f)
+    return _faiss_index, _faiss_meta
+
 def _get_model():
     global _model
     if _model is None:
-        try:
-            from sentence_transformers import SentenceTransformer
-            _model = SentenceTransformer("all-MiniLM-L6-v2")
-        except ImportError:
-            _model = "unavailable"
-    return _model if _model != "unavailable" else None
+        from sentence_transformers import SentenceTransformer
+        _model = SentenceTransformer("all-MiniLM-L6-v2")
+    return _model
 
 def normalize(text):
     return re.sub(r'\s+', ' ', text.lower().strip())
+
+def is_real_skill(phrase):
+    return phrase.lower() not in JUNK_PHRASES
 
 def extract_keywords(text, skills):
     text = normalize(text)
@@ -78,32 +95,6 @@ def weighted_section_score(resume, job_text, skills):
         breakdown[section] = {"matched": len(matched), "weight": weight, "contribution": round(weighted, 4)}
     return {"score": round(total, 4), "breakdown": breakdown}
 
-def tfidf_cosine(t1, t2):
-    def vec(t):
-        words = re.findall(r'\b[a-z]{2,}\b', normalize(t))
-        freq = Counter(words)
-        total = sum(freq.values()) or 1
-        return {w: c/total for w, c in freq.items()}
-    rv, jv = vec(t1), vec(t2)
-    common = set(rv) & set(jv)
-    if not common: return 0.0
-    dot = sum(rv[w]*jv[w] for w in common)
-    nr = math.sqrt(sum(v**2 for v in rv.values()))
-    nj = math.sqrt(sum(v**2 for v in jv.values()))
-    return dot / (nr * nj) if nr * nj else 0.0
-
-def semantic_score_batch(resume_text, job_texts):
-    model = _get_model()
-    if model:
-        from sentence_transformers import util
-        r_emb = model.encode(resume_text[:2000], convert_to_tensor=True)
-        j_embs = model.encode([t[:2000] for t in job_texts], convert_to_tensor=True)
-        scores = util.cos_sim(r_emb, j_embs)[0].tolist()
-        return [round(s, 4) for s in scores]
-    return [tfidf_cosine(resume_text, jt) for jt in job_texts]
-
-WEIGHTS = {"keyword": 0.35, "weighted": 0.35, "semantic": 0.30}
-
 def _grade(score):
     if score >= 80: return "A"
     if score >= 65: return "B"
@@ -113,35 +104,74 @@ def _grade(score):
 
 def score_against_all_jobs(resume, jobs_csv, skills, top_n=10):
     import pandas as pd
-    df = pd.read_csv(jobs_csv).fillna("")
-    jobs = df.to_dict("records")
+
     resume_text = resume.get("raw_text", "")
-    job_texts = [j.get("description","") + " " + j.get("title","") for j in jobs]
+    index, meta = _load_faiss()
 
-    print(f"Scoring {len(jobs)} jobs...")
-    sem_scores = semantic_score_batch(resume_text, job_texts)
+    if index is not None:
+        # FAISS fast path
+        model = _get_model()
+        r_emb = model.encode([resume_text[:2000]], convert_to_numpy=True).astype(np.float32)
+        import faiss as faiss_lib
+        faiss_lib.normalize_L2(r_emb)
 
-    results = []
-    for job, sem in zip(jobs, sem_scores):
-        job_text = job.get("description","") + " " + job.get("title","")
-        kw = keyword_score(resume_text, job_text, skills)
-        ws = weighted_section_score(resume, job_text, skills)
-        final = (kw["score"] * WEIGHTS["keyword"] +
-                 ws["score"] * WEIGHTS["weighted"] +
-                 sem         * WEIGHTS["semantic"])
-        results.append({
-            "final_score":    round(final * 100, 1),
-            "grade":          _grade(final * 100),
-            "keyword_match":  kw,
-            "weighted_match": ws,
-            "semantic_score": round(sem * 100, 1),
-            "job_title":      job.get("title",""),
-            "job_company":    job.get("company",""),
-            "apply_url":      job.get("apply_url",""),
-        })
+        # get top_n * 5 candidates from FAISS then re-rank
+        k = min(top_n * 5, index.ntotal)
+        scores, indices = index.search(r_emb, k)
 
-    results.sort(key=lambda x: x["final_score"], reverse=True)
-    return results[:top_n]
+        df = pd.read_csv(jobs_csv).fillna("")
+
+        results = []
+        for sem_score, idx in zip(scores[0], indices[0]):
+            if idx < 0 or idx >= len(df): continue
+            job = df.iloc[idx].to_dict()
+            job_text = job.get("description","") + " " + job.get("title","")
+            kw = keyword_score(resume_text, job_text, skills)
+            ws = weighted_section_score(resume, job_text, skills)
+            final = (kw["score"] * 0.35 +
+                     ws["score"] * 0.35 +
+                     float(sem_score) * 0.30)
+            results.append({
+                "final_score":    round(final * 100, 1),
+                "grade":          _grade(final * 100),
+                "keyword_match":  kw,
+                "weighted_match": ws,
+                "semantic_score": round(float(sem_score) * 100, 1),
+                "job_title":      job.get("title",""),
+                "job_company":    job.get("company",""),
+                "location":       job.get("location",""),
+                "apply_url":      job.get("apply_url",""),
+                "description":    job.get("description","")[:300],
+            })
+
+        results.sort(key=lambda x: x["final_score"], reverse=True)
+        return results[:top_n]
+
+    else:
+        # fallback: tfidf only (no FAISS)
+        print("FAISS index not found, using keyword scoring only...")
+        df = pd.read_csv(jobs_csv).fillna("")
+        results = []
+        for _, row in df.iterrows():
+            job = row.to_dict()
+            job_text = job.get("description","") + " " + job.get("title","")
+            kw = keyword_score(resume_text, job_text, skills)
+            ws = weighted_section_score(resume, job_text, skills)
+            final = (kw["score"] * 0.50 + ws["score"] * 0.50)
+            results.append({
+                "final_score":    round(final * 100, 1),
+                "grade":          _grade(final * 100),
+                "keyword_match":  kw,
+                "weighted_match": ws,
+                "semantic_score": 0,
+                "job_title":      job.get("title",""),
+                "job_company":    job.get("company",""),
+                "location":       job.get("location",""),
+                "apply_url":      job.get("apply_url",""),
+                "description":    job.get("description","")[:300],
+            })
+        results.sort(key=lambda x: x["final_score"], reverse=True)
+        return results[:top_n]
 
 
 if __name__ == "__main__":

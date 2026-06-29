@@ -1,42 +1,41 @@
 # AI Resume Analyzer
 
-An AI-powered Resume Analyzer that evaluates resumes against job descriptions using NLP, semantic similarity, and ATS scoring. Provides detailed feedback, skill gap analysis, keyword optimization, and improvement suggestions.
+An AI-powered Resume Analyzer that matches your resume against 3000+ real job listings using NLP, semantic similarity, and ATS scoring. Provides job matches, skill gap analysis, and LLM-generated feedback.
 
 ---
 
 ## Features
 
-* Upload PDF and DOCX resumes
-* Extract and clean resume text automatically
-* Parse resume sections (Education, Experience, Skills, Projects, Certifications)
-* Compare resume with job descriptions
-* ATS compatibility scoring (0–100)
-* Semantic similarity using Sentence Transformers
-* Missing keyword and skill gap detection
-* Resume improvement recommendations
-* REST API with FastAPI
-* Interactive API docs via Swagger and ReDoc
+- Upload PDF and DOCX resumes
+- Scrape live jobs from Greenhouse, Lever, Ashby, Workable
+- Extract and clean resume text automatically
+- Parse resume sections (Education, Experience, Skills, Summary)
+- ATS compatibility scoring (0–100) using keyword + weighted + semantic scoring
+- FAISS vector search — results in under 5 seconds
+- LLM analysis via Groq — match analysis, skills advice, cover letter generation
+- Pinterest-style frontend with dark/light mode
+- REST API with FastAPI + Swagger docs
 
 ---
 
 ## Tech Stack
 
 ### Backend
-* Python 3.11+
-* FastAPI
-* Uvicorn
+- Python 3.11+
+- FastAPI, Uvicorn
 
 ### NLP & AI
-* spaCy
-* Sentence Transformers
-* Scikit-learn
-* NumPy
-* Pandas
+- Sentence Transformers (`all-MiniLM-L6-v2`)
+- FAISS (vector search)
+- Groq API (Llama 3.3 70B)
+- Scikit-learn, NumPy, Pandas
 
 ### Document Parsing
-* PyMuPDF
-* pdfplumber
-* python-docx
+- pdfplumber
+- python-docx
+
+### Scraping
+- Playwright
 
 ---
 
@@ -46,28 +45,37 @@ An AI-powered Resume Analyzer that evaluates resumes against job descriptions us
 ai-resume-analyzer/
 │
 ├── backend/
-│   ├── api/
 │   ├── ats/
-│   ├── database/
+│   │   └── ats_scorer.py          # ATS scoring engine
 │   ├── embeddings/
+│   │   └── build_index.py         # FAISS index builder
 │   ├── llm/
-│   ├── models/
+│   │   └── llm_analyzer.py        # Groq LLM analysis
 │   ├── parsers/
+│   │   └── resume_parser.py       # PDF/DOCX parser
 │   ├── services/
+│   │   ├── scrape_jobs.py         # Job scraper
+│   │   └── clean_jobs.py          # Data cleaner
 │   ├── utils/
-│   └── main.py
+│   │   └── build_skills_list.py   # Skills extractor
+│   └── main.py                    # FastAPI server
 │
 ├── config/
 ├── datasets/
+│   ├── all_jobs.csv               # Scraped job listings
+│   ├── skills_list.json           # Extracted skills
+│   ├── faiss_index.bin            # FAISS vector index
+│   └── faiss_meta.json            # Job metadata
 ├── docs/
 │   ├── api.md
 │   ├── architecture.md
 │   ├── setup.md
 │   └── workflow.md
 ├── frontend/
-├── reports/
+│   └── index.html                 # Pinterest-style UI
+├── reports/                       # LLM analysis output
 ├── tests/
-├── uploads/
+├── uploads/                       # Temp resume uploads
 │
 ├── .env.example
 ├── requirements.txt
@@ -78,49 +86,107 @@ ai-resume-analyzer/
 
 ## Quickstart
 
-See [docs/setup.md](docs/setup.md) for full setup instructions including environment variables and model downloads.
+### 1. Clone and setup
 
 ```bash
 git clone https://github.com/<your-username>/ai-resume-analyzer.git
 cd ai-resume-analyzer
 python -m venv venv
 venv\Scripts\activate        # Windows
-# source venv/bin/activate   # Linux/macOS
+source venv/bin/activate     # Linux/macOS
 pip install -r requirements.txt
-python -m spacy download en_core_web_sm
-cp .env.example .env         # then fill in your values
-uvicorn backend.main:app --reload
+playwright install chromium
 ```
 
-API: `http://127.0.0.1:8000`
-Swagger: `http://127.0.0.1:8000/docs`
+### 2. Environment variables
+
+```bash
+cp .env.example .env
+```
+
+Add to `.env`:
+```
+GROQ_API_KEY=your_groq_api_key_here
+```
+
+Get a free key at [console.groq.com](https://console.groq.com)
+
+### 3. Scrape jobs
+
+```bash
+python backend/services/scrape_jobs.py https://job-boards.greenhouse.io/anthropic
+python backend/services/scrape_jobs.py https://job-boards.greenhouse.io/stripe
+python backend/services/scrape_jobs.py https://jobs.ashbyhq.com/openai
+```
+
+### 4. Clean data and build skills
+
+```bash
+python backend/services/clean_jobs.py
+python backend/utils/build_skills_list.py
+```
+
+### 5. Build FAISS index (once)
+
+```bash
+python backend/embeddings/build_index.py
+```
+
+### 6. Start the API
+
+```bash
+python backend/main.py
+```
+
+API: `http://localhost:8000`  
+Swagger: `http://localhost:8000/docs`
+
+### 7. Start the frontend
+
+```bash
+cd frontend
+python -m http.server 3000
+```
+
+Open `http://localhost:3000`
+
+---
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/health` | Check API + job count |
+| POST | `/analyze` | Upload resume → get matches |
+| GET | `/jobs` | Browse all jobs |
+| GET | `/jobs/companies` | List companies |
+| GET | `/jobs/search?q=python` | Search jobs by keyword |
 
 ---
 
 ## Roadmap
 
-* [x] Resume Upload
-* [x] Resume Parsing
-* [ ] Skill Extraction
-* [ ] ATS Scoring
-* [ ] Semantic Matching
-* [ ] Resume Recommendations
-* [ ] Dashboard
-* [ ] Authentication
-* [ ] Deployment
-
-*(Update checkboxes as features are completed.)*
+- [x] Job Scraper (Greenhouse, Lever, Ashby, Workable)
+- [x] Resume Parsing (PDF + DOCX)
+- [x] Skills Extraction (from real job data)
+- [x] ATS Scoring (keyword + weighted + semantic)
+- [x] FAISS Vector Search
+- [x] LLM Analysis (Groq + Llama 3.3)
+- [x] REST API (FastAPI)
+- [x] Frontend (Pinterest-style, dark/light)
+- [ ] Authentication
+- [ ] User dashboard
+- [ ] Deployment
 
 ---
 
 ## Future Enhancements
 
-* GPT-powered resume rewriting
-* Cover letter generation
-* Interview question generation
-* Company-specific ATS optimization
-* Resume ranking
-* Recruiter dashboard
+- GPT-powered resume rewriting
+- Interview question generation
+- Company-specific ATS optimization
+- Recruiter dashboard
+- Mobile app
 
 ---
 
