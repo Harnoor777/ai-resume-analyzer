@@ -2,7 +2,7 @@ import asyncio, json, sys, csv, os
 from urllib.parse import urljoin
 from playwright.async_api import async_playwright
 
-TARGET = sys.argv[1] if len(sys.argv) > 1 else "https://job-boards.greenhouse.io/airbnb"
+TARGET = sys.argv[1] if len(sys.argv) > 1 else "https://job-boards.greenhouse.io/linear"
 CSV_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "datasets", "all_jobs.csv")
 CSV_FIELDS = ["title","location","department","employment_type","experience","description","apply_url","posted_date","company","source_url"]
 
