@@ -14,7 +14,7 @@ from auth.auth_routes import router as auth_router
 from auth.auth import decode_token
 
 app = FastAPI(title="AI Resume Analyzer", version="1.0.0")
-app.include_router(auth_router)
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -22,6 +22,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(auth_router)
 
 BASE_DIR    = os.path.dirname(__file__)
 UPLOADS_DIR = os.path.join(BASE_DIR, "..", "uploads")
