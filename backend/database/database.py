@@ -11,6 +11,16 @@ engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
 
+class User(Base):
+    __tablename__ = "users"
+    id               = Column(Integer, primary_key=True, index=True)
+    name             = Column(String(300))
+    email_encrypted  = Column(String(1000), unique=True, index=True)
+    password_hash    = Column(String(500))
+    is_verified      = Column(String(10), default="False")
+    created_at       = Column(DateTime, default=datetime.utcnow)
+    resumes          = relationship("Resume", back_populates="user")
+
 
 class Job(Base):
     __tablename__ = "jobs"
@@ -30,6 +40,7 @@ class Job(Base):
 class Resume(Base):
     __tablename__ = "resumes"
     id          = Column(Integer, primary_key=True, index=True)
+    user_id     = Column(Integer, ForeignKey("users.id"), nullable=True)
     file_name   = Column(String(500))
     name        = Column(String(300))
     email       = Column(String(300))
@@ -39,6 +50,7 @@ class Resume(Base):
     skills      = Column(JSON)
     raw_text    = Column(Text)
     created_at  = Column(DateTime, default=datetime.utcnow)
+    user        = relationship("User", back_populates="resumes")
     analyses    = relationship("Analysis", back_populates="resume")
 
 

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; }
+        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #0056b3; }
+        .error { background: #ffe6e6; color: #d00; padding: 10px; margin: 10px 0; border-radius: 4px; display: none; }
+        .success { background: #e6ffe6; color: #070; padding: 10px; margin: 10px 0; border-radius: 4px; display: none; }
+        .info { background: #e6f3ff; color: #05c; padding: 10px; margin: 10px 0; border-radius: 4px; }
+        pre { background: #f8f8f8; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 12px; }
+        h3 { margin-top: 20px; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🧪 Registration Debug Test</h2>
+        
+        <div class="info">
+            <strong>Testing:</strong> http://localhost:8000/auth/register
+        </div>
+
+        <h3>Test Data</h3>
+        <input type="text" id="name" placeholder="Full Name" value="Test User">
+        <input type="email" id="email" placeholder="Email" value="test@example.com">
+        <input type="password" id="password" placeholder="Password" value="TestPass123!">
+        
+        <button onclick="testRegistration()">Test Registration</button>
+        
+        <div class="error" id="error"></div>
+        <div class="success" id="success"></div>
+        
+        <h3>Response Log</h3>
+        <pre id="log">Click button to test...</pre>
+    </div>
+
+    <script>
+        const API = "http://localhost:8000";
+        
+        function log(msg) {
+            const logEl = document.getElementById('log');
+            logEl.textContent += '\n' + msg;
+            console.log(msg);
+        }
+        
+        function showError(msg) {
+            const el = document.getElementById('error');
+            el.style.display = 'block';
+            el.textContent = msg;
+            document.getElementById('success').style.display = 'none';
+        }
+        
+        function showSuccess(msg) {
+            const el = document.getElementById('success');
+            el.style.display = 'block';
+            el.textContent = msg;
+            document.getElementById('error').style.display = 'none';
+        }
+        
+        async function testRegistration() {
+            document.getElementById('log').textContent = 'Starting test...\n';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('success').style.display = 'none';
+            
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            
+            log('Input validation...');
+            log(`Name: ${name}`);
+            log(`Email: ${email}`);
+            log(`Password: ${password.replace(/./g, '*')}`);
+            
+            if (!name || !email || !password) {
+                showError("All fields required");
+                return;
+            }
+            
+            // Password validation
+            log('\nValidating password...');
+            if (password.length < 8) {
+                showError("Password must be at least 8 characters");
+                log('❌ Password too short');
+                return;
+            }
+            if (!/[A-Z]/.test(password)) {
+                showError("Password must include at least one uppercase letter");
+                log('❌ No uppercase letter');
+                return;
+            }
+            if (!/[a-z]/.test(password)) {
+                showError("Password must include at least one lowercase letter");
+                log('❌ No lowercase letter');
+                return;
+            }
+            if (!/[0-9]/.test(password)) {
+                showError("Password must include at least one number");
+                log('❌ No number');
+                return;
+            }
+            if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+                showError("Password must include at least one special character");
+                log('❌ No special character');
+                return;
+            }
+            log('✅ Password validation passed');
+            
+            // API call
+            log('\nSending registration request...');
+            log(`POST ${API}/auth/register`);
+            
+            try {
+                const requestBody = { name, email, password };
+                log(`Request body: ${JSON.stringify(requestBody, null, 2)}`);
+                
+                const res = await fetch(`${API}/auth/register`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                
+                log(`\nResponse status: ${res.status} ${res.statusText}`);
+                
+                const data = await res.json();
+                log(`Response data: ${JSON.stringify(data, null, 2)}`);
+                
+                if (!res.ok) {
+                    throw new Error(data.detail || "Registration failed");
+                }
+                
+                showSuccess("✅ Registration successful! Check your email for OTP.");
+                log('\n✅ SUCCESS! Registration completed.');
+                
+            } catch (e) {
+                log(`\n❌ ERROR: ${e.message}`);
+                log(`Error type: ${e.constructor.name}`);
+                log(`Full error: ${JSON.stringify(e, Object.getOwnPropertyNames(e), 2)}`);
+                
+                let errorMsg = "Registration failed. Please try again.";
+                if (e.message && e.message !== "Failed to fetch") {
+                    errorMsg = e.message;
+                } else if (e.message === "Failed to fetch") {
+                    errorMsg = "Cannot connect to server. Is the backend running at http://localhost:8000?";
+                }
+                showError(errorMsg);
+            }
+        }
+    </script>
+</body>
+</html>

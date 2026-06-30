@@ -1,0 +1,72 @@
+═══════════════════════════════════════════════════════════════
+    🚀 AI RESUME ANALYZER - QUICK START COMMANDS
+═══════════════════════════════════════════════════════════════
+
+📍 STEP 1: ACTIVATE VIRTUAL ENVIRONMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+venv\Scripts\activate
+
+
+📍 STEP 2: UPDATE DATABASE SCHEMA (NEW FOREIGN KEY!)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+python backend/database/database.py
+
+
+📍 STEP 3: START BACKEND (Terminal 1)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+python backend/main.py
+
+✅ Backend running at: http://localhost:8000
+✅ API Docs at: http://localhost:8000/docs
+
+
+📍 STEP 4: START FRONTEND (Terminal 2 - Keep Terminal 1 running!)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+cd frontend
+python -m http.server 3000
+
+✅ Frontend running at: http://localhost:3000
+
+
+═══════════════════════════════════════════════════════════════
+    ✨ THAT'S IT! OPEN http://localhost:3000 IN YOUR BROWSER
+═══════════════════════════════════════════════════════════════
+
+
+🧪 QUICK TESTS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Test Password Validation:
+   • Click "Sign up"
+   • Try password: "weak" ❌ Should reject
+   • Try password: "Password1!" ✅ Should accept
+
+2. Test User Registration:
+   • Should show success message for 1.2 seconds
+   • Should see password hints below input fields
+
+3. Test User Tracking:
+   • Login and upload a resume
+   • Resume should be linked to your user ID in database
+
+
+🔧 TROUBLESHOOTING:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Port 8000 in use?
+  python backend/main.py  # Try again or use --port 8001
+
+Port 3000 in use?
+  python -m http.server 3001
+
+Database error?
+  • Check PostgreSQL is running
+  • Verify .env DATABASE_URL is correct
+
+Module not found?
+  pip install -r requirements.txt
+
+
+═══════════════════════════════════════════════════════════════
+    📚 See STARTUP_GUIDE.md for detailed instructions
+═══════════════════════════════════════════════════════════════

@@ -58,7 +58,6 @@
             transition: background 0.3s, color 0.3s;
             min-height: 100vh;
         }
-        /* header */
         
         header {
             position: sticky;
@@ -76,10 +75,17 @@
             font-size: 22px;
             font-weight: 900;
             letter-spacing: -0.03em;
+            cursor: pointer;
         }
         
         .logo span {
             color: var(--accent);
+        }
+        
+        .header-right {
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
         
         .theme-btn {
@@ -92,16 +98,171 @@
             font-size: 13px;
             font-weight: 600;
             font-family: inherit;
-            transition: background 0.2s;
         }
-        /* main */
+        
+        .auth-btn {
+            background: var(--accent);
+            border: none;
+            border-radius: 24px;
+            padding: 8px 18px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+        }
+        
+        .outline-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 8px 18px;
+            cursor: pointer;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+        }
         
         main {
             max-width: 1200px;
             margin: 0 auto;
             padding: 40px 24px;
         }
-        /* hero */
+        /* auth pages */
+        
+        .auth-page {
+            display: none;
+            min-height: 80vh;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .auth-page.active {
+            display: flex;
+        }
+        
+        .auth-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: var(--shadow);
+        }
+        
+        .auth-card h2 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+        
+        .auth-card p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+        
+        .form-group input {
+            width: 100%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: var(--text);
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border 0.2s;
+        }
+        
+        .form-group input:focus {
+            border-color: var(--accent);
+        }
+        
+        .form-group input::placeholder {
+            color: var(--muted);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            background: var(--accent);
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            margin-top: 4px;
+        }
+        
+        .submit-btn:hover {
+            opacity: 0.85;
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .auth-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+        
+        .auth-link a {
+            color: var(--accent);
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .auth-error {
+            background: var(--red-bg);
+            border: 1px solid var(--red);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: var(--red);
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+        }
+        
+        .auth-success {
+            background: var(--green-bg);
+            border: 1px solid var(--green);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: var(--green);
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+        }
+        
+        .otp-hint {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 6px;
+        }
+        /* app pages */
         
         #hero {
             text-align: center;
@@ -130,7 +291,6 @@
         #hero strong {
             color: var(--text);
         }
-        /* drop zone */
         
         #drop-zone {
             border: 2px dashed var(--border);
@@ -165,7 +325,6 @@
             font-size: 13px;
             color: var(--muted);
         }
-        /* top n */
         
         .topn-row {
             display: flex;
@@ -197,7 +356,6 @@
             background: var(--accent);
             color: #fff;
         }
-        /* loading */
         
         #loading {
             display: none;
@@ -227,7 +385,6 @@
                 transform: rotate(360deg);
             }
         }
-        /* error */
         
         #error-box {
             display: none;
@@ -239,7 +396,6 @@
             color: var(--red);
             font-weight: 600;
         }
-        /* results */
         
         #results {
             display: none;
@@ -276,7 +432,6 @@
             font-weight: 600;
             font-family: inherit;
         }
-        /* candidate card */
         
         .candidate-card {
             background: var(--surface);
@@ -309,7 +464,6 @@
             flex-wrap: wrap;
             gap: 4px;
         }
-        /* tag */
         
         .tag {
             display: inline-block;
@@ -336,13 +490,11 @@
             background: var(--accent-light);
             color: var(--accent);
         }
-        /* masonry grid */
         
         .grid {
             columns: 3 260px;
             column-gap: 16px;
         }
-        /* job card */
         
         .job-card {
             break-inside: avoid;
@@ -430,11 +582,6 @@
             font-weight: 700;
             text-decoration: none;
             margin-top: 10px;
-            transition: opacity 0.15s;
-        }
-        
-        .job-card .apply-btn:hover {
-            opacity: 0.85;
         }
         
         .job-card .bottom-tags {
@@ -443,13 +590,71 @@
             gap: 4px;
             margin-top: 10px;
         }
-        /* score ring */
+        /* user menu */
         
-        .score-ring {
-            flex-shrink: 0;
+        .user-menu {
+            position: relative;
         }
         
-        @media (max-width: 600px) {
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: none;
+            cursor: pointer;
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 44px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 8px;
+            min-width: 160px;
+            box-shadow: var(--shadow-hover);
+            z-index: 200;
+        }
+        
+        .user-dropdown.open {
+            display: block;
+        }
+        
+        .user-dropdown p {
+            font-size: 12px;
+            color: var(--muted);
+            padding: 6px 10px;
+        }
+        
+        .user-dropdown button {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 8px 10px;
+            text-align: left;
+            cursor: pointer;
+            color: var(--text);
+            font-size: 13px;
+            font-family: inherit;
+            border-radius: 8px;
+        }
+        
+        .user-dropdown button:hover {
+            background: var(--surface2);
+        }
+        
+        .user-dropdown .logout-btn {
+            color: var(--red);
+        }
+        
+        @media(max-width:600px) {
             #hero h1 {
                 font-size: 32px;
             }
@@ -462,6 +667,9 @@
             .grid {
                 columns: 1;
             }
+            .auth-card {
+                padding: 28px 20px;
+            }
         }
     </style>
 </head>
@@ -469,66 +677,493 @@
 <body>
 
     <header>
-        <div class="logo"><span>resume</span>match</div>
-        <button class="theme-btn" onclick="toggleTheme()">☀️ Light</button>
+        <div class="logo" onclick="goHome()"><span>resume</span>match</div>
+        <div class="header-right">
+            <button class="theme-btn" onclick="toggleTheme()">☀️ Light</button>
+            <div id="auth-buttons">
+                <button class="outline-btn" onclick="showPage('login')" style="margin-right:8px">Log in</button>
+                <button class="auth-btn" onclick="showPage('register')">Sign up</button>
+            </div>
+            <div class="user-menu" id="user-menu" style="display:none">
+                <button class="user-avatar" id="user-avatar" onclick="toggleDropdown()">H</button>
+                <div class="user-dropdown" id="user-dropdown">
+                    <p id="user-email-display"></p>
+                    <button onclick="goHome()">🏠 Home</button>
+                    <button onclick="showHistory()">📄 My Resumes</button>
+                    <button class="logout-btn" onclick="logout()">🚪 Log out</button>
+                </div>
+            </div>
+        </div>
     </header>
 
     <main>
-        <!-- hero -->
-        <section id="hero">
-            <h1>Find jobs that <em>actually fit</em></h1>
-            <p>Drop your resume. Matched against <strong>3000+ real jobs</strong> in seconds.</p>
-
-            <div id="drop-zone" onclick="document.getElementById('file-input').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleDrop(event)">
-                <div class="icon">📄</div>
-                <h3>Drop your resume here</h3>
-                <p>PDF or DOCX · Analyzed instantly</p>
-                <input id="file-input" type="file" accept=".pdf,.docx" hidden onchange="handleFile(this.files[0])">
+        <!-- register -->
+        <div class="auth-page" id="page-register">
+            <div class="auth-card">
+                <h2>Create account</h2>
+                <p>Find jobs that match your skills</p>
+                <div class="auth-error" id="reg-error"></div>
+                <div class="auth-success" id="reg-success"></div>
+                <div class="form-group">
+                    <label>Full name</label>
+                    <input type="text" id="reg-name" placeholder="Harnoor Kaur">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="reg-email" placeholder="you@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="reg-password" placeholder="Min 8 characters">
+                    <div class="otp-hint">Must include uppercase, lowercase, number, and special character</div>
+                </div>
+                <button class="submit-btn" id="reg-btn" onclick="register()">Create account</button>
+                <div class="auth-link">Already have an account? <a onclick="showPage('login')">Log in</a></div>
             </div>
-
-            <div class="topn-row">
-                <span>Show top</span>
-                <button class="topn-btn active" onclick="setTopN(this, 10)">10</button>
-                <button class="topn-btn" onclick="setTopN(this, 20)">20</button>
-                <button class="topn-btn" onclick="setTopN(this, 50)">50</button>
-                <span>matches</span>
-            </div>
-        </section>
-
-        <!-- loading -->
-        <div id="loading">
-            <div class="spin">⚙️</div>
-            <h3>Analyzing your resume...</h3>
-            <p>Matching against 3000+ real jobs</p>
         </div>
 
-        <!-- error -->
-        <div id="error-box"></div>
-
-        <!-- results -->
-        <div id="results">
-            <div class="results-header">
-                <div>
-                    <h2>Your matches</h2>
-                    <p id="results-subtitle"></p>
+        <!-- verify otp -->
+        <div class="auth-page" id="page-verify">
+            <div class="auth-card">
+                <h2>Verify email</h2>
+                <p id="verify-subtitle">Enter the 6-digit code sent to your email</p>
+                <div class="auth-error" id="ver-error"></div>
+                <div class="form-group">
+                    <label>OTP Code</label>
+                    <input type="text" id="ver-otp" placeholder="123456" maxlength="6">
+                    <div class="otp-hint">Check your inbox — expires in 10 minutes</div>
                 </div>
-                <button class="new-btn" onclick="reset()">← New resume</button>
+                <button class="submit-btn" id="ver-btn" onclick="verifyOtp()">Verify & continue</button>
+                <div class="auth-link"><a onclick="showPage('register')">← Back to register</a></div>
             </div>
-            <div class="candidate-card" id="candidate-card"></div>
-            <div class="grid" id="jobs-grid"></div>
+        </div>
+
+        <!-- login -->
+        <div class="auth-page" id="page-login">
+            <div class="auth-card">
+                <h2>Welcome back</h2>
+                <p>Log in to your ResumeMatch account</p>
+                <div class="auth-error" id="login-error"></div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="login-email" placeholder="you@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" placeholder="Your password">
+                </div>
+                <button class="submit-btn" id="login-btn" onclick="login()">Log in</button>
+                <div class="auth-link"><a onclick="showPage('forgot')">Forgot password?</a></div>
+                <div class="auth-link">No account? <a onclick="showPage('register')">Sign up</a></div>
+            </div>
+        </div>
+
+        <!-- forgot password -->
+        <div class="auth-page" id="page-forgot">
+            <div class="auth-card">
+                <h2>Reset password</h2>
+                <p>We'll send a code to your email</p>
+                <div class="auth-error" id="forgot-error"></div>
+                <div class="auth-success" id="forgot-success"></div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="forgot-email" placeholder="you@example.com">
+                </div>
+                <button class="submit-btn" id="forgot-btn" onclick="sendResetOtp()">Send reset code</button>
+                <div class="auth-link"><a onclick="showPage('login')">← Back to login</a></div>
+            </div>
+        </div>
+
+        <!-- reset password -->
+        <div class="auth-page" id="page-reset">
+            <div class="auth-card">
+                <h2>New password</h2>
+                <p>Enter the code from your email and set a new password</p>
+                <div class="auth-error" id="reset-error"></div>
+                <div class="auth-success" id="reset-success"></div>
+                <div class="form-group">
+                    <label>OTP Code</label>
+                    <input type="text" id="reset-otp" placeholder="123456" maxlength="6">
+                </div>
+                <div class="form-group">
+                    <label>New password</label>
+                    <input type="password" id="reset-password" placeholder="Min 8 characters">
+                    <div class="otp-hint">Must include uppercase, lowercase, number, and special character</div>
+                </div>
+                <button class="submit-btn" id="reset-btn" onclick="resetPassword()">Set new password</button>
+            </div>
+        </div>
+
+        <!-- hero / main app -->
+        <div id="page-home">
+            <section id="hero">
+                <h1>Find jobs that <em>actually fit</em></h1>
+                <p>Drop your resume. Matched against <strong>3000+ real jobs</strong> in seconds.</p>
+                <div id="drop-zone" onclick="document.getElementById('file-input').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleDrop(event)">
+                    <div class="icon">📄</div>
+                    <h3>Drop your resume here</h3>
+                    <p>PDF or DOCX · Analyzed instantly</p>
+                    <input id="file-input" type="file" accept=".pdf,.docx" hidden onchange="handleFile(this.files[0])">
+                </div>
+                <div class="topn-row">
+                    <span>Show top</span>
+                    <button class="topn-btn active" onclick="setTopN(this,10)">10</button>
+                    <button class="topn-btn" onclick="setTopN(this,20)">20</button>
+                    <button class="topn-btn" onclick="setTopN(this,50)">50</button>
+                    <span>matches</span>
+                </div>
+            </section>
+            <div id="loading">
+                <div class="spin">⚙️</div>
+                <h3>Analyzing your resume...</h3>
+                <p>Matching against 3000+ real jobs</p>
+            </div>
+            <div id="error-box"></div>
+            <div id="results">
+                <div class="results-header">
+                    <div>
+                        <h2>Your matches</h2>
+                        <p id="results-subtitle"></p>
+                    </div>
+                    <button class="new-btn" onclick="reset()">← New resume</button>
+                </div>
+                <div class="candidate-card" id="candidate-card"></div>
+                <div class="grid" id="jobs-grid"></div>
+            </div>
         </div>
     </main>
 
     <script>
         const API = "http://localhost:8000";
         let topN = 10;
+        let currentUser = null;
+        let pendingEmail = "";
 
+        // --- theme ---
         function toggleTheme() {
             document.body.classList.toggle("light");
-            const btn = document.querySelector(".theme-btn");
-            btn.textContent = document.body.classList.contains("light") ? "🌙 Dark" : "☀️ Light";
+            document.querySelector(".theme-btn").textContent =
+                document.body.classList.contains("light") ? "🌙 Dark" : "☀️ Light";
         }
 
+        // --- pages ---
+        function showPage(name) {
+            document.querySelectorAll(".auth-page, #page-home").forEach(p => {
+                p.classList.remove("active");
+                p.style.display = "";
+            });
+            if (name === "home") {
+                document.getElementById("page-home").style.display = "block";
+            } else {
+                const el = document.getElementById(`page-${name}`);
+                if (el) {
+                    el.classList.add("active");
+                    el.style.display = "flex";
+                }
+            }
+        }
+
+        function goHome() {
+            showPage("home");
+        }
+
+        // --- user state ---
+        function updateHeader() {
+            const token = localStorage.getItem("access_token");
+            if (token && currentUser) {
+                document.getElementById("auth-buttons").style.display = "none";
+                document.getElementById("user-menu").style.display = "block";
+                document.getElementById("user-avatar").textContent = (currentUser.name || "U")[0].toUpperCase();
+                document.getElementById("user-email-display").textContent = currentUser.email;
+            } else {
+                document.getElementById("auth-buttons").style.display = "flex";
+                document.getElementById("user-menu").style.display = "none";
+            }
+        }
+
+        function toggleDropdown() {
+            document.getElementById("user-dropdown").classList.toggle("open");
+        }
+
+        document.addEventListener("click", e => {
+            if (!e.target.closest(".user-menu"))
+                document.getElementById("user-dropdown").classList.remove("open");
+        });
+
+        function logout() {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            currentUser = null;
+            updateHeader();
+            goHome();
+        }
+
+        function showHistory() {
+            alert("Resume history coming soon!");
+        }
+
+        // --- auth helpers ---
+        function setLoading(btnId, loading, text) {
+            const btn = document.getElementById(btnId);
+            btn.disabled = loading;
+            btn.textContent = loading ? "Please wait..." : text;
+        }
+
+        function showError(id, msg) {
+            const el = document.getElementById(id);
+            el.style.display = "block";
+            el.textContent = msg;
+        }
+
+        function showSuccess(id, msg) {
+            const el = document.getElementById(id);
+            el.style.display = "block";
+            el.textContent = msg;
+        }
+
+        function clearMessages(...ids) {
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = "none";
+            });
+        }
+
+        function validatePassword(pw) {
+            if (pw.length < 8) {
+                return "Password must be at least 8 characters";
+            }
+            if (!/[A-Z]/.test(pw)) {
+                return "Password must include at least one uppercase letter";
+            }
+            if (!/[a-z]/.test(pw)) {
+                return "Password must include at least one lowercase letter";
+            }
+            if (!/[0-9]/.test(pw)) {
+                return "Password must include at least one number";
+            }
+            if (!/[!@#$%^&*(),.?":{}|<>]/.test(pw)) {
+                return "Password must include at least one special character (!@#$%^&*(),.?\":{}|<>)";
+            }
+            return null;
+        }
+
+        // --- register ---
+        async function register() {
+            clearMessages("reg-error", "reg-success");
+            const name = document.getElementById("reg-name").value.trim();
+            const email = document.getElementById("reg-email").value.trim();
+            const password = document.getElementById("reg-password").value;
+            if (!name || !email || !password) {
+                showError("reg-error", "All fields required");
+                return;
+            }
+            
+            const passwordError = validatePassword(password);
+            if (passwordError) {
+                showError("reg-error", passwordError);
+                return;
+            }
+
+            setLoading("reg-btn", true, "Create account");
+            try {
+                const res = await fetch(`${API}/auth/register`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        password
+                    })
+                });
+                
+                if (!res.ok) {
+                    const data = await res.json();
+                    throw new Error(data.detail || "Registration failed");
+                }
+                
+                const data = await res.json();
+                pendingEmail = email;
+                document.getElementById("verify-subtitle").textContent = `Enter the 6-digit code sent to ${email}`;
+                showSuccess("reg-success", "Account created! Check your email for the code.");
+                setTimeout(() => showPage("verify"), 1200);
+            } catch (e) {
+                console.error("Registration error:", e);
+                let errorMsg = "Registration failed. Please try again.";
+                if (e.message && e.message !== "Failed to fetch") {
+                    errorMsg = e.message;
+                } else if (e.message === "Failed to fetch") {
+                    errorMsg = "Cannot connect to server. Is the backend running at http://localhost:8000?";
+                }
+                showError("reg-error", errorMsg);
+            } finally {
+                setLoading("reg-btn", false, "Create account");
+            }
+        }
+
+        // --- verify otp ---
+        async function verifyOtp() {
+            clearMessages("ver-error");
+            const otp = document.getElementById("ver-otp").value.trim();
+            if (!otp || otp.length !== 6) {
+                showError("ver-error", "Enter the 6-digit code");
+                return;
+            }
+
+            setLoading("ver-btn", true, "Verify & continue");
+            try {
+                const res = await fetch(`${API}/auth/verify`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email: pendingEmail,
+                        otp
+                    })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.detail || "Verification failed");
+                localStorage.setItem("access_token", data.access_token);
+                localStorage.setItem("refresh_token", data.refresh_token);
+                await fetchMe();
+                updateHeader();
+                goHome();
+            } catch (e) {
+                showError("ver-error", e.message);
+            } finally {
+                setLoading("ver-btn", false, "Verify & continue");
+            }
+        }
+
+        // --- login ---
+        async function login() {
+            clearMessages("login-error");
+            const email = document.getElementById("login-email").value.trim();
+            const password = document.getElementById("login-password").value;
+            if (!email || !password) {
+                showError("login-error", "All fields required");
+                return;
+            }
+
+            setLoading("login-btn", true, "Log in");
+            try {
+                const res = await fetch(`${API}/auth/login`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password
+                    })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.detail || "Login failed");
+                localStorage.setItem("access_token", data.access_token);
+                localStorage.setItem("refresh_token", data.refresh_token);
+                currentUser = data.user;
+                updateHeader();
+                goHome();
+            } catch (e) {
+                showError("login-error", e.message);
+            } finally {
+                setLoading("login-btn", false, "Log in");
+            }
+        }
+
+        // --- forgot password ---
+        async function sendResetOtp() {
+            clearMessages("forgot-error", "forgot-success");
+            const email = document.getElementById("forgot-email").value.trim();
+            if (!email) {
+                showError("forgot-error", "Enter your email");
+                return;
+            }
+
+            setLoading("forgot-btn", true, "Send reset code");
+            try {
+                const res = await fetch(`${API}/auth/forgot-password`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email
+                    })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.detail || "Failed to send OTP");
+                pendingEmail = email;
+                showSuccess("forgot-success", "OTP sent! Check your email.");
+                setTimeout(() => showPage("reset"), 1500);
+            } catch (e) {
+                showError("forgot-error", e.message);
+            } finally {
+                setLoading("forgot-btn", false, "Send reset code");
+            }
+        }
+
+        // --- reset password ---
+        async function resetPassword() {
+            clearMessages("reset-error", "reset-success");
+            const otp = document.getElementById("reset-otp").value.trim();
+            const new_password = document.getElementById("reset-password").value;
+            if (!otp || !new_password) {
+                showError("reset-error", "All fields required");
+                return;
+            }
+            
+            const passwordError = validatePassword(new_password);
+            if (passwordError) {
+                showError("reset-error", passwordError);
+                return;
+            }
+
+            setLoading("reset-btn", true, "Set new password");
+            try {
+                const res = await fetch(`${API}/auth/reset-password`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email: pendingEmail,
+                        otp,
+                        new_password
+                    })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.detail || "Reset failed");
+                showSuccess("reset-success", "Password reset! Redirecting to login...");
+                setTimeout(() => showPage("login"), 1500);
+            } catch (e) {
+                showError("reset-error", e.message);
+            } finally {
+                setLoading("reset-btn", false, "Set new password");
+            }
+        }
+
+        // --- fetch current user ---
+        async function fetchMe() {
+            const token = localStorage.getItem("access_token");
+            if (!token) return;
+            try {
+                const res = await fetch(`${API}/auth/me`, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+                if (res.ok) {
+                    currentUser = await res.json();
+                } else {
+                    localStorage.removeItem("access_token");
+                }
+            } catch (e) {}
+        }
+
+        // --- main app ---
         function setTopN(btn, n) {
             topN = n;
             document.querySelectorAll(".topn-btn").forEach(b => b.classList.remove("active"));
@@ -544,127 +1179,118 @@
 
         async function handleFile(file) {
             if (!file) return;
-            show("loading");
+            document.getElementById("hero").style.display = "none";
+            document.getElementById("loading").style.display = "block";
+            document.getElementById("results").style.display = "none";
             clearError();
 
             const form = new FormData();
             form.append("file", file);
+            const token = localStorage.getItem("access_token");
+            const headers = token ? {
+                "Authorization": `Bearer ${token}`
+            } : {};
 
             try {
                 const res = await fetch(`${API}/analyze?top_n=${topN}`, {
                     method: "POST",
+                    headers,
                     body: form
                 });
                 if (!res.ok) {
                     const err = await res.json();
                     throw new Error(err.detail || "Server error");
                 }
-                const data = await res.json();
-                renderResults(data);
+                renderResults(await res.json());
             } catch (e) {
                 showError(e.message);
-                show("hero");
+                document.getElementById("hero").style.display = "block";
+            } finally {
+                document.getElementById("loading").style.display = "none";
             }
         }
 
         function renderResults(data) {
-            // candidate
             const c = data.candidate;
             document.getElementById("candidate-card").innerHTML = `
-      <h3>${c.name || "Candidate"}</h3>
-      <div class="candidate-meta">
-        ${c.email ? c.email : ""}
-        ${c.phone ? " · " + c.phone : ""}
-        ${c.linkedin ? ` · <a href="${c.linkedin}" target="_blank">LinkedIn</a>` : ""}
-        ${c.github ? ` · <a href="${c.github}" target="_blank">GitHub</a>` : ""}
+    <h3>${c.name||"Candidate"}</h3>
+    <div class="candidate-meta">
+      ${c.email?c.email:""}${c.phone?` · ${c.phone}`:""}
+      ${c.linkedin?` · <a href="${c.linkedin}" target="_blank">LinkedIn</a>`:""}
+      ${c.github?` · <a href="${c.github}" target="_blank">GitHub</a>`:""}
+    </div>
+    <div class="skills-row">${(c.skills||[]).map(s=>`<span class="tag matched">${s}</span>`).join("")}</div>
+  `;
+  document.getElementById("results-subtitle").textContent =
+    `${data.top_matches?.length} jobs found for ${c.name||"you"}`;
+  document.getElementById("jobs-grid").innerHTML = data.top_matches.map((job,i)=>`
+    <div class="job-card" onclick="toggleCard(this)">
+      <div class="top-row">
+        <div class="info">
+          <div class="company">${job.job_company}</div>
+          <div class="title">${job.job_title}</div>
+          ${job.location?`<div class="location">📍 ${job.location}</div>`:""}
+        </div>
+        ${scoreRing(job.final_score)}
       </div>
-      <div class="skills-row">
-        ${(c.skills || []).map(s => `<span class="tag matched">${s}</span>`).join("")}
+      <div class="tags">
+        ${(job.keyword_match?.matched||[]).slice(0,4).map(s=>`<span class="tag matched">${s}</span>`).join("")}
+        ${(job.keyword_match?.missing||[]).slice(0,3).map(s=>`<span class="tag missing">${s}</span>`).join("")}
       </div>
-    `;
-
-    document.getElementById("results-subtitle").textContent =
-      `${data.top_matches?.length} jobs found for ${c.name || "you"}`;
-
-    // jobs
-    const grid = document.getElementById("jobs-grid");
-    grid.innerHTML = data.top_matches.map((job, i) => `
-      <div class="job-card" onclick="toggleCard(this)">
-        <div class="top-row">
-          <div class="info">
-            <div class="company">${job.job_company}</div>
-            <div class="title">${job.job_title}</div>
-            ${job.location ? `<div class="location">📍 ${job.location}</div>` : ""}
-          </div>
-          ${scoreRing(job.final_score)}
-        </div>
-        <div class="tags">
-          ${(job.keyword_match?.matched || []).slice(0,4).map(s => `<span class="tag matched">${s}</span>`).join("")}
-          ${(job.keyword_match?.missing || []).slice(0,3).map(s => `<span class="tag missing">${s}</span>`).join("")}
-        </div>
-        ${job.description ? `<div class="desc">${job.description.slice(0,130)}...</div>` : ""}
-        <div class="bottom-tags">
-          <span class="tag accent">Grade ${job.grade}</span>
-          <span class="tag">${job.semantic_score}% semantic</span>
-        </div>
-        <div class="expand-content">
-          <div style="margin-bottom:10px">
-            <strong style="font-size:12px">All matched:</strong><br>
-            ${(job.keyword_match?.matched || []).map(s => `<span class="tag matched">${s}</span>`).join(" ")}
-          </div>
-          <div style="margin-bottom:10px">
-            <strong style="font-size:12px">Missing skills:</strong><br>
-            ${(job.keyword_match?.missing || []).map(s => `<span class="tag missing">${s}</span>`).join(" ")}
-          </div>
-          <a class="apply-btn" href="${job.apply_url}" target="_blank" onclick="event.stopPropagation()">Apply Now →</a>
-        </div>
+      ${job.description?`<div class="desc">${job.description.slice(0,130)}...</div>`:""}
+      <div class="bottom-tags">
+        <span class="tag accent">Grade ${job.grade}</span>
+        <span class="tag">${job.semantic_score}% semantic</span>
       </div>
-    `).join("");
+      <div class="expand-content">
+        <div style="margin-bottom:10px"><strong style="font-size:12px">All matched:</strong><br>
+          ${(job.keyword_match?.matched||[]).map(s=>`<span class="tag matched">${s}</span>`).join(" ")}
+        </div>
+        <div style="margin-bottom:10px"><strong style="font-size:12px">Missing skills:</strong><br>
+          ${(job.keyword_match?.missing||[]).map(s=>`<span class="tag missing">${s}</span>`).join(" ")}
+        </div>
+        <a class="apply-btn" href="${job.apply_url}" target="_blank" onclick="event.stopPropagation()">Apply Now →</a>
+      </div>
+    </div>
+  `).join("");
+  document.getElementById("results").style.display = "block";
+}
 
-    show("results");
-  }
+function scoreRing(score){
+  const r=26,cx=32,cy=32,size=64;
+  const circ=2*Math.PI*r;
+  const fill=(score/100)*circ;
+  const color=score>=65?"#4CAF82":score>=40?"#E07A45":"#C45B5B";
+  return `<svg width="${size}" height="${size}">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#33302C" stroke-width="5"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="5"
+      stroke-dasharray="${fill} ${circ}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})"/>
+    <text x="${cx}" y="${cy+5}" text-anchor="middle" fill="${color}" font-size="13" font-weight="700">${score}</text>
+  </svg>`;
+}
 
-  function scoreRing(score) {
-    const r = 26, cx = 32, cy = 32, size = 64;
-    const circ = 2 * Math.PI * r;
-    const fill = (score / 100) * circ;
-    const color = score >= 65 ? "#4CAF82" : score >= 40 ? "#E07A45" : "#C45B5B";
-    return `
-      <svg class="score-ring" width="${size}" height="${size}">
-        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#33302C" stroke-width="5"/>
-        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="5"
-          stroke-dasharray="${fill} ${circ}" stroke-linecap="round"
-          transform="rotate(-90 ${cx} ${cy})"/>
-        <text x="${cx}" y="${cy+5}" text-anchor="middle" fill="${color}" font-size="13" font-weight="700">${score}</text>
-      </svg>`;
-  }
+function toggleCard(card){ card.classList.toggle("expanded"); }
 
-  function toggleCard(card) {
-    card.classList.toggle("expanded");
-  }
+function showError(msg){
+  const box=document.getElementById("error-box");
+  box.style.display="block"; box.textContent="Error: "+msg;
+}
+function clearError(){ document.getElementById("error-box").style.display="none"; }
 
-  function show(section) {
-    document.getElementById("hero").style.display    = section === "hero"    ? "block" : "none";
-    document.getElementById("loading").style.display = section === "loading" ? "block" : "none";
-    document.getElementById("results").style.display = section === "results" ? "block" : "none";
-  }
+function reset(){
+  document.getElementById("hero").style.display="block";
+  document.getElementById("results").style.display="none";
+  document.getElementById("jobs-grid").innerHTML="";
+  document.getElementById("file-input").value="";
+  clearError();
+}
 
-  function showError(msg) {
-    const box = document.getElementById("error-box");
-    box.style.display = "block";
-    box.textContent = "Error: " + msg;
-  }
-
-  function clearError() {
-    document.getElementById("error-box").style.display = "none";
-  }
-
-  function reset() {
-    show("hero");
-    document.getElementById("jobs-grid").innerHTML = "";
-    document.getElementById("file-input").value = "";
-    clearError();
-  }
+// --- init ---
+(async()=>{
+  await fetchMe();
+  updateHeader();
+  goHome();
+})();
     </script>
 </body>
 
