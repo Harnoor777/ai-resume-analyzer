@@ -834,7 +834,7 @@
     </main>
 
     <script>
-        const API = "http://localhost:8000";
+        const API = "https://resume-analyzer-api-hdui.onrender.com";
         let topN = 10;
         let currentUser = null;
         let pendingEmail = "";
@@ -957,7 +957,7 @@
                 showError("reg-error", "All fields required");
                 return;
             }
-            
+
             const passwordError = validatePassword(password);
             if (passwordError) {
                 showError("reg-error", passwordError);
@@ -977,12 +977,12 @@
                         password
                     })
                 });
-                
+
                 if (!res.ok) {
                     const data = await res.json();
                     throw new Error(data.detail || "Registration failed");
                 }
-                
+
                 const data = await res.json();
                 pendingEmail = email;
                 document.getElementById("verify-subtitle").textContent = `Enter the 6-digit code sent to ${email}`;
@@ -1114,7 +1114,7 @@
                 showError("reset-error", "All fields required");
                 return;
             }
-            
+
             const passwordError = validatePassword(new_password);
             if (passwordError) {
                 showError("reset-error", passwordError);
